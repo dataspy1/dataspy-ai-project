@@ -1,0 +1,13 @@
+{
+  "revenue": "OA No",
+  "date": "End Demand Date",
+  "product": "End Demand Item",
+  "order_id": "OA No",
+  "quantity": "End Demand Qty",
+  "stock": "Onhand Stock (EBS)",
+  "lead_time": "Processing  Lead Time",
+  "status": "OA Status",
+  "reorder_level": "Safety Stock",
+  "delivery_date": "Need By Date",
+  "shipment_date": "Scheduled Ship Date"
+}

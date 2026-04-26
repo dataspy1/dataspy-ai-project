@@ -1,0 +1,11 @@
+.env
+*.env
+venv/
+myenv/
+__pycache__/
+
+# Ignore ALL uploads everywhere
+uploads/**
+app/uploads/**
+backend/app/uploads/**
+backend/uploads/**

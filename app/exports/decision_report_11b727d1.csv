@@ -1,0 +1,5 @@
+sr_no,priority,action,rationale,decision_type,rank_order,supporting_evidence
+1,medium,,These products are already performing strongly and can be leveraged further for growth.,scale,,{}
+2,medium,,Mid-performing products often offer better growth leverage than only focusing on current top sellers.,rescue,,{}
+3,medium,,"Regional underperformance may indicate local demand, execution, or distribution gaps.",rescue,,{}
+4,medium,,Weak movement combined with relatively high stock may lock working capital into low-return inventory.,optimize,,{}
