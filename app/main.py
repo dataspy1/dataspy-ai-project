@@ -20,16 +20,29 @@ app = FastAPI(
     version="0.2.0"
 )
 
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=[
+#         "http://localhost:5173",
+#         "http://127.0.0.1:5173",
+#     ],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+origins = [
+    "https://dataspy-frontend.vercel.app/",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=origins,   # or ["*"] for testing
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Existing routes that do NOT define their own /api prefix internally
 app.include_router(upload_router, prefix="/api", tags=["Upload"])
@@ -54,19 +67,19 @@ app.include_router(chat_router)
 
 
 ## Added this new code for CORS middleware issue
-from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.middleware.cors import CORSMiddleware
 
-origins = [
-    "https://dataspy-frontend-xz2f.vercel.app",
-]
+# origins = [
+#     "https://dataspy-frontend-xz2f.vercel.app",
+# ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,   # or ["*"] for testing
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,   # or ["*"] for testing
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 @app.get("/")
 def root():
