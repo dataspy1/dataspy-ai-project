@@ -31,13 +31,12 @@ app = FastAPI(
 #     allow_headers=["*"],
 # )
 
-origins = [
-    "https://dataspy-frontend.vercel.app/",
-]
 
+
+# ✅ ADD CORS HERE (BEFORE ANY ROUTERS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,   # or ["*"] for testing
+    allow_origins=["*"],   # keep this for now
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -66,20 +65,7 @@ app.include_router(preprocessing_router)
 app.include_router(chat_router)
 
 
-## Added this new code for CORS middleware issue
-# from fastapi.middleware.cors import CORSMiddleware
 
-# origins = [
-#     "https://dataspy-frontend-xz2f.vercel.app",
-# ]
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,   # or ["*"] for testing
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
 
 @app.get("/")
 def root():
