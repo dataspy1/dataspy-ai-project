@@ -31,16 +31,21 @@ app = FastAPI(
 #     allow_headers=["*"],
 # )
 
+from fastapi.middleware.cors import CORSMiddleware
 
+origins = [
+    "https://dataspy-frontend.vercel.app",   # MUST add this
+]
 
-# ✅ ADD CORS HERE (BEFORE ANY ROUTERS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # keep this for now
+    allow_origins=origins,   # ❌ don't use ["*"] in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
 
 
 # Existing routes that do NOT define their own /api prefix internally
