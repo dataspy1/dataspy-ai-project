@@ -223,6 +223,9 @@ def build_chat_analysis_context(analysis_context: Dict[str, Any]) -> str:
             "enabled_capabilities": dashboard_summary.get("enabled_capabilities", []),
         },
         "sales_context": {
+            "top_products_by_quantity": sales.get("top_products_by_quantity", [])[:5],
+            "top_regions_by_quantity": sales.get("top_regions_by_quantity", [])[:5],
+
             "resolved_columns": sales.get("resolved_columns", {}),
             "top_products_by_revenue": sales.get("top_products_by_revenue", [])[:3],
             "top_regions_by_revenue": sales.get("top_regions_by_revenue", [])[:3],
@@ -231,6 +234,8 @@ def build_chat_analysis_context(analysis_context: Dict[str, Any]) -> str:
             "product_concentration_summary": sales.get("product_concentration_summary"),
             "region_concentration_summary": sales.get("region_concentration_summary"),
             "weakest_region_summary": sales.get("weakest_region_summary"),
+
+            
         },
         "forecast_context": {
             "target_role": first_non_empty(
@@ -654,12 +659,14 @@ def try_basic_excel_queries(question: str, analysis_context: Dict[str, Any]):
     top_regions_revenue = sales.get("top_regions_by_revenue", []) or []
     top_products_quantity = sales.get("top_products_by_quantity", []) or []
     top_regions_quantity = sales.get("top_regions_by_quantity", []) or []
+    
     revenue_trend = sales.get("revenue_trend", []) or []
     quantity_trend = sales.get("quantity_trend", []) or []
     pending_summary = sales.get("pending_order_pattern_summary", {}) or {}
     low_stock_items = inventory.get("low_stock_items", []) or []
 
     # total revenue
+    
     if "total revenue" in q or "overall revenue" in q:
         total = 0.0
         for item in top_products_revenue:
@@ -691,7 +698,7 @@ def try_basic_excel_queries(question: str, analysis_context: Dict[str, Any]):
             return f"The top 3 contributing products are: {', '.join(names)}."
 
     # top region
-    if "top region" in q or "best region" in q or "strongest region" in q:
+    if "top region" in q or "best region" in q or "strongest region" in q or "maximum revenue region" in q or "region generated maximum revenue" in q or "which region generated maximum revenue" in q or "highest revenue by region" in q:
         if top_regions_revenue:
             name, value = _extract_name_and_value(top_regions_revenue[0])
             if name is not None:
@@ -742,11 +749,23 @@ def try_basic_excel_queries(question: str, analysis_context: Dict[str, Any]):
                 return f"The product with the highest visible quantity is {name} at {value}."
 
     # top quantity region
-    if "top quantity region" in q or "highest quantity region" in q:
+    # if "top quantity region" in q or "highest quantity region" in q:
+    #     if top_regions_quantity:
+    #         name, value = _extract_name_and_value(top_regions_quantity[0])
+    #         if name is not None:
+    #             return f"The region with the highest visible quantity is {name} at {value}."
+
+    if (
+        "top quantity region" in q
+        or "highest quantity region" in q
+        or "maximum quantity" in q
+        or "maximum quantity sales" in q
+        or "most quantity sold region" in q
+    ):
         if top_regions_quantity:
             name, value = _extract_name_and_value(top_regions_quantity[0])
             if name is not None:
-                return f"The region with the highest visible quantity is {name} at {value}."
+                return f"The region with the highest quantity sales is {name} with total quantity of {value}."
 
     # low stock
     if "low stock" in q or "stock risk" in q or "stock out" in q:
@@ -1433,6 +1452,7 @@ Answer style requirements:
 - Then briefly explain the business meaning if useful.
 - Keep the answer natural, business-friendly, and concise.
 - Do not speculate.
+- Do NOT recommend discontinuing products, removing regions, or taking irreversible business actions unless the analysis explicitly supports that recommendation.
 - Do not invent numbers or trends.
 - If the answer is not available, say exactly: "{MISSING_INFO_MESSAGE}"
 - Do not mention internal section names unless necessary for clarity.

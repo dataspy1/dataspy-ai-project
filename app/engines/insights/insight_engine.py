@@ -744,6 +744,11 @@ def generate_insights(
         top_products_quantity = safe_group_sum(df, product_col, quantity_col, top_n=None) if product_col and quantity_col else []
         top_regions_quantity = safe_group_sum(df, region_col, quantity_col, top_n=None) if region_col and quantity_col else []
 
+        print("REGION COL:", region_col)
+        print("QUANTITY COL:", quantity_col)
+        print("DF COLUMNS:", list(df.columns))
+        print("TOP REGIONS QUANTITY TEST:", safe_group_sum(df, region_col, quantity_col, top_n=None)[:3])
+
         revenue_trend = safe_time_series_sum(df, date_col, revenue_col, freq="D") if date_col and revenue_col else []
         quantity_trend = safe_time_series_sum(df, date_col, quantity_col, freq="D") if date_col and quantity_col else []
 

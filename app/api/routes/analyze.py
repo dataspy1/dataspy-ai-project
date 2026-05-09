@@ -6,6 +6,8 @@ from typing import Optional, Dict, Any
 import math
 import pandas as pd
 
+import re # added for proper dataset name
+
 from app.engines.mapping.schema_mapper import detect_schema
 from app.engines.understanding.capability_detector import detect_capabilities
 from app.engines.understanding.profiler import profile_dataframe
@@ -544,6 +546,7 @@ def analyze_dataset(payload: AnalyzeRequest):
 
         standardized_result = standardize_client_dataset(raw_df)
         df = standardized_result["dataframe"]
+        
         standardization_metadata = standardized_result["metadata"]
 
 # Handle business-meaningful missing values before profiling/summarizing
@@ -552,9 +555,10 @@ def analyze_dataset(payload: AnalyzeRequest):
         missing_data_summary = get_missing_data_summary(df)
 
         file_summary = {
+            "display_filename": re.sub(r"^[a-f0-9]{32}_", "", payload.saved_filename), #added this for proper file name
             "saved_filename": payload.saved_filename,
-            "rows": int(df.shape[0]),
-            "columns": list(df.columns),
+            "rows": int(raw_df.shape[0]), # change df.shape to raw_df.shape
+            "columns": list(raw_df.columns), #  change df.shape to raw_df.shape
             "dtypes": {col: str(dtype) for col, dtype in df.dtypes.items()},
             "preview": df.head(5).fillna("").to_dict(orient="records"),
             "standardization_metadata": standardization_metadata,
