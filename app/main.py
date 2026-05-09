@@ -35,6 +35,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 origins = [
     "https://dataspy-frontend.vercel.app",
+    "https://dataspy-frontend-6mynbmk76-dataspy1s-projects.vercel.app",
+
     "http://localhost:5173",
     "http://127.0.0.1:5173"   # MUST add this
 ]
