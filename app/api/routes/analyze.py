@@ -552,7 +552,7 @@ def analyze_dataset(payload: AnalyzeRequest):
 # Handle business-meaningful missing values before profiling/summarizing
         df = handle_business_missing_values(df)
 
-        missing_data_summary = get_missing_data_summary(df)
+        missing_data_summary = get_missing_data_summary(raw_df)
 
         file_summary = {
             "display_filename": re.sub(r"^[a-f0-9]{32}_", "", payload.saved_filename), #added this for proper file name
@@ -560,8 +560,11 @@ def analyze_dataset(payload: AnalyzeRequest):
             "rows": int(raw_df.shape[0]), # change df.shape to raw_df.shape
             "columns": list(raw_df.columns), #  change df.shape to raw_df.shape
             "dtypes": {col: str(dtype) for col, dtype in df.dtypes.items()},
-            "preview": df.head(5).fillna("").to_dict(orient="records"),
+           # add this 
+           "preview": raw_df.head(5).fillna("").astype(str).to_dict(orient="records"),
+           "missing_data_summary": missing_data_summary,
             "standardization_metadata": standardization_metadata,
+
         }
 
         schema_suggestions = detect_schema(df)
